@@ -1,0 +1,67 @@
+﻿@model ShopperAE.Areas.Administrator.Models.Order
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @*<div class="modal-header text-center delete">
+                <h4 class="modal-title mt-2 mb-2" id="deleteModal">Bạn có muốn xóa bản ghi này không?</h4>
+            </div>*@
+            <div class="modal-footer">
+                @using (Html.BeginForm())
+                {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4 style="text-align:center;">Order</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.cusPhone, "cusPhone", htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("cusPhone", null, htmlAttributes: new { @class = "form-control" ,@required = "required" })
+                            @Html.ValidationMessageFor(model => model.cusPhone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.orderMessage, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.orderMessage, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.orderMessage, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.orderDateTime, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.orderDateTime, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.orderDateTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.orderStatus, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.orderStatus, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.orderStatus, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-6 col-md-4">
+                            <input type="submit" value="Create" class="btn btn-sm btn-danger" />
+                            <button type="button" class="btn btn-sm btn-primary" style=" border: 0.5px solid #a8a9ad;" data-dismiss="modal">Cancel</button>
+
+                        </div>
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

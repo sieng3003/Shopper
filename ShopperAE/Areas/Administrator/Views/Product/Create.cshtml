@@ -1,0 +1,67 @@
+﻿@model ShopperAE.Areas.Administrator.Models.Product
+
+@{
+    ViewBag.Title = "Tạo sản phẩm";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h2 style="color:black;">Tạo sản phẩm mới</h2>
+
+<div>
+    <i class="fa fa-undo fa-fw"></i>@Html.ActionLink("Quay lại", "Index", "Product")
+</div>
+<br />
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        <div class="text-success">
+            @ViewBag.CreateProError
+        </div>
+        <div class="col-lg-3"></div>
+        <div class="form-group col-lg-6">
+            <label style="color:black;">Mã sản phẩm</label>
+            @Html.EditorFor(model => model.proID, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập mã sản phẩm..." } })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proID)</div>
+
+            <label style="color:black;">Loại sản phẩm</label>
+            @Html.DropDownListFor(model => model.typeID, ViewBag.typeListCreate as SelectList, new { @class = "form-control" })
+
+            <label style="color:black;">Hãng sản xuất</label>
+            @Html.DropDownListFor(model => model.pdcID, ViewBag.pdcListCreate as SelectList, new { @class = "form-control" })
+
+            <label style="color:black;">Tên sản phẩm</label>
+            @Html.EditorFor(model => model.proName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập tên sản phẩm..." } })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proName)</div>
+
+            <label style="color:black;">Kích cỡ</label>
+            @Html.EditorFor(model => model.proSize, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập kích cỡ sản phẩm..." } })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proSize)</div>
+
+            <label style="color:black;">Đơn giá</label>
+            @Html.EditorFor(model => model.proPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập đơn giá sản phẩm..." } })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proPrice)</div>
+
+            <label style="color:black;">Chiết khấu</label>
+            @Html.EditorFor(model => model.proDiscount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập chiết khấu (%)..." } })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proDiscount)</div>
+
+            <label style="color:black;">Hình ảnh</label>
+            <input type="file" id="file" name="file" />
+            <div class="text-danger">@ViewBag.HinhAnh</div>
+
+            <label style="color:black;">Mô tả</label>
+            @Html.TextAreaFor(model => model.proDescription, new { @class = "form-control", @placeholder = "Nhập mô tả sản phẩm..." })
+            <div class="text-danger">@Html.ValidationMessageFor(model => model.proDescription)</div>
+            <br />
+            <input type="submit" value="Tạo mới" class="btn btn-primary" />
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

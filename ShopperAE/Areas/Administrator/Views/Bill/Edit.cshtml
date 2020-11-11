@@ -1,0 +1,67 @@
+﻿@model ShopperAE.Areas.Administrator.Models.Order
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center delete">           
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4 style="text-align:center;">Edit Order</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.orderID)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.cusPhone, "Họ và Tên", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.DropDownList("cusPhone", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.cusPhone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.orderMessage,"Ghi chú sản phẩm", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.orderMessage, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.orderMessage, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.orderDateTime,"Ngày đặt hàng", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.orderDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.orderDateTime, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.orderStatus, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.orderStatus, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.orderStatus, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-7">
+                                <input type="submit" value="Save" class="btn btn-sm btn-danger" />
+                                <button type="button" class="btn btn-sm btn-primary" style=" border: 0.5px solid #a8a9ad;" data-dismiss="modal">Cancel</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

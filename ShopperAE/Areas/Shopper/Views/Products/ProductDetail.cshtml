@@ -1,0 +1,232 @@
+﻿@model ShopperAE.Areas.Shopper.Models.Product
+@{
+    ViewBag.Title = "Chi tiết";
+    Layout = "~/Areas/Shopper/Views/Shared/_LayoutShop.cshtml";
+}
+@{
+    ShopperAE.Repository.ProductDAO proDAO = new ShopperAE.Repository.ProductDAO();
+    ShopperAE.Areas.Shopper.Models.UserContext db = new ShopperAE.Areas.Shopper.Models.UserContext();
+}
+<div class="single">
+    <div class="container left">
+        <div class="single-top">
+            <div class="col-md-5 single-top">
+                <div class="single-w3agile">
+                    <div id="picture-frame">
+                        <img src="@Model.proPhoto" data-src="@Model.proPhoto" alt="" class="img-responsive" />
+                    </div>
+                    <script src="~/Areas/Shopper/Content/js/jquery.zoomtoo.js"></script>
+                    <script>
+                        $(function () {
+                            $("#picture-frame").zoomToo({
+                                magnify: 1
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        @{
+            int newPrice = Int32.Parse(Model.proPrice) - ((Int32.Parse(Model.proPrice) * Model.proDiscount.Value) / 100);
+        }
+        <div class="col-md-7 single-top-left ">
+            <div class="single-right">
+                <h3>@Model.proName</h3>
+                <p style="font-size:20px;">Size: @Model.proSize</p>
+                <p style="font-size:20px;">Khuyến mãi giảm: @Model.proDiscount %</p>
+                <div class="pr-single">
+                    <p class="reduced " style="font-size:24px;"><del>@proDAO.formatNumber(Model.proPrice) VNĐ</del>@proDAO.formatNumber(newPrice.ToString()) VNĐ</p>
+                </div>
+                <div class="stars starrr" data-rating="0"></div>
+               
+                <p class="in-pa">Mô tả: @Model.proDescription </p>
+                <ul class="social-top">
+                    <li><a href="https://vi-vn.facebook.com/" target="_blank" class="icon facebook"><i class="fa fa-facebook" aria-hidden="true"></i><span></span></a></li>
+                </ul>
+                <div class="add add-3">
+                    <a class="btn btn-warning" href="@Url.Action("ThemVaoGio", "GioHang", new { SanPhamID = Model.proID })"> <span class="glyphicon glyphicon-shopping-cart"></span>  Thêm Vào Giỏ Hàng </a>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+        <!--TIêu đề-->
+        <div class="spec " style="margin-top:30px;">
+            <h3><a href="@Url.Action("ProductsByPdc", "Products", new { id= Model.pdcID, page=1 })" style="text-decoration:none;">Thời Trang Cùng Hãng @Model.Producer.pdcName</a></h3>          
+        </div>
+        <!--Sản phẩm-->
+        <div class="tab-head ">
+            <div class=" tab-content tab-content-t ">
+                <div class="tab-pane active text-style" id="tab1">
+                    <div class=" con-w3l">
+                        @{int qtt = 0;}
+                        @foreach (var item in db.Products.SqlQuery("SELECT * FROM Products WHERE pdcID="+Model.pdcID+" ORDER BY proUpdateDate DESC"))
+                        {
+                            qtt++;
+                            if (qtt > 4)
+                            {
+                                break;
+                            }
+                            int newPrice1 = Int32.Parse(item.proPrice) - ((Int32.Parse(item.proPrice) * item.proDiscount.Value) / 100);
+                            <div class="col-md-3 m-wthree" style="margin-bottom:30px;">
+                                <div class="col-m">
+                                    <a href="@Url.Action("ProductDetail", "Products", new { id=item.proID })" class="offer-img">
+                                        <img src="@item.proPhoto" width="150" height="150" style="margin: 12px 0 0 50px;" alt="@item.proPhoto">
+                                        @if (Int32.Parse(item.proPrice) > newPrice1)
+                                        {
+                                            <div class="offer"><p><span>Giảm @item.proDiscount %</span></p></div>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    </a>
+                                    <div class="mid-1">
+                                        <div class="women">
+                                            @if (item.proName.Length > 20)
+                                            {
+                                                <h6><a href="@Url.Action("ProductDetail", "Products", new { id=item.proID })" data-toggle="tooltip" title="@item.proName">@item.proName.Substring(0, 19) . . .</a></h6>
+                                            }
+                                            else
+                                            {
+                                                <h6><a href="@Url.Action("ProductDetail", "Products", new { id=item.proID })">@item.proName</a></h6>
+                                            }
+                                        </div>
+                                        (Size: @item.proSize)
+                                        <div class="mid-2">
+                                            <p><label>@proDAO.formatNumber(item.proPrice) VNĐ</label><em class="item_price">@proDAO.formatNumber(newPrice1.ToString()) VNĐ</em></p>
+                                            <div class="clearfix"></div>
+                                            <div class="stars starrr" data-rating="0"></div>
+                                           
+                                            <div>
+                                                <a href="#"><img src="@item.Producer.pdcPhoto" width="20" height="20" /> @item.Producer.pdcName</a>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="add">
+                                            <a class="btn btn-warning" href="@Url.Action("ThemVaoGio", "GioHang", new { SanPhamID = item.proID })"> <span class="glyphicon glyphicon-shopping-cart"></span>  Thêm Vào  Giỏ </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+       
+    </div>
+</div>
+
+<style>
+    .animated {
+        -webkit-transition: height 0.2s;
+        -moz-transition: height 0.2s;
+        transition: height 0.2s;
+    }
+
+    .stars {
+        margin: 20px 0;
+        font-size: 24px;
+        color: #d17581;
+    }
+    .toasang {
+        margin: 20px;
+        position: relative;
+        display: block;
+        width: 80px;
+        height: 80px;
+        text-align: center;
+        border-radius: 100%;
+        font: 700 30px/80px 'arial';
+        text-decoration: none;
+        color: #313131;
+        z-index: 1;
+        -webkit-transition: all .3s ease;
+        -moz-transition: all .3s ease;
+        -ms-transition: all .3s ease;
+        -o-transition: all .3s ease;
+        transition: all .3s ease;
+    }
+
+        .toasang:after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border-radius: 100%;
+            background: #dfdfdf;
+            z-index: -1;
+            -webkit-transition: all .3s ease;
+            -moz-transition: all .3s ease;
+            -ms-transition: all .3s ease;
+            -o-transition: all .3s ease;
+            transition: all .3s ease;
+        }
+
+        .toasang:hover {
+            color: #fff;
+            background: #399;
+        }
+
+            .toasang:hover:after {
+                background: transparent;
+                -webkit-transform: scale(1.6);
+                -moz-transform: scale(1.6);
+                -ms-transform: scale(1.6);
+                -o-transform: scale(1.6);
+                transform: scale(1.6);
+            }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    (function (e) { var t, o = { className: "autosizejs", append: "", callback: !1, resizeDelay: 10 }, i = '<textarea tabindex="-1" style="position:absolute; top:-999px; left:0; right:auto; bottom:auto; border:0; padding: 0; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; word-wrap:break-word; height:0 !important; min-height:0 !important; overflow:hidden; transition:none; -webkit-transition:none; -moz-transition:none;"/>', n = ["fontFamily", "fontSize", "fontWeight", "fontStyle", "letterSpacing", "textTransform", "wordSpacing", "textIndent"], s = e(i).data("autosize", !0)[0]; s.style.lineHeight = "99px", "99px" === e(s).css("lineHeight") && n.push("lineHeight"), s.style.lineHeight = "", e.fn.autosize = function (i) { return this.length ? (i = e.extend({}, o, i || {}), s.parentNode !== document.body && e(document.body).append(s), this.each(function () { function o() { var t, o; "getComputedStyle" in window ? (t = window.getComputedStyle(u, null), o = u.getBoundingClientRect().width, e.each(["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"], function (e, i) { o -= parseInt(t[i], 10) }), s.style.width = o + "px") : s.style.width = Math.max(p.width(), 0) + "px" } function a() { var a = {}; if (t = u, s.className = i.className, d = parseInt(p.css("maxHeight"), 10), e.each(n, function (e, t) { a[t] = p.css(t) }), e(s).css(a), o(), window.chrome) { var r = u.style.width; u.style.width = "0px", u.offsetWidth, u.style.width = r } } function r() { var e, n; t !== u ? a() : o(), s.value = u.value + i.append, s.style.overflowY = u.style.overflowY, n = parseInt(u.style.height, 10), s.scrollTop = 0, s.scrollTop = 9e4, e = s.scrollTop, d && e > d ? (u.style.overflowY = "scroll", e = d) : (u.style.overflowY = "hidden", c > e && (e = c)), e += w, n !== e && (u.style.height = e + "px", f && i.callback.call(u, u)) } function l() { clearTimeout(h), h = setTimeout(function () { var e = p.width(); e !== g && (g = e, r()) }, parseInt(i.resizeDelay, 10)) } var d, c, h, u = this, p = e(u), w = 0, f = e.isFunction(i.callback), z = { height: u.style.height, overflow: u.style.overflow, overflowY: u.style.overflowY, wordWrap: u.style.wordWrap, resize: u.style.resize }, g = p.width(); p.data("autosize") || (p.data("autosize", !0), ("border-box" === p.css("box-sizing") || "border-box" === p.css("-moz-box-sizing") || "border-box" === p.css("-webkit-box-sizing")) && (w = p.outerHeight() - p.height()), c = Math.max(parseInt(p.css("minHeight"), 10) - w || 0, p.height()), p.css({ overflow: "hidden", overflowY: "hidden", wordWrap: "break-word", resize: "none" === p.css("resize") || "vertical" === p.css("resize") ? "none" : "horizontal" }), "onpropertychange" in u ? "oninput" in u ? p.on("input.autosize keyup.autosize", r) : p.on("propertychange.autosize", function () { "value" === event.propertyName && r() }) : p.on("input.autosize", r), i.resizeDelay !== !1 && e(window).on("resize.autosize", l), p.on("autosize.resize", r), p.on("autosize.resizeIncludeStyle", function () { t = null, r() }), p.on("autosize.destroy", function () { t = null, clearTimeout(h), e(window).off("resize", l), p.off("autosize").off(".autosize").css(z).removeData("autosize") }), r()) })) : this } })(window.jQuery || window.$);
+
+    var __slice = [].slice; (function (e, t) { var n; n = function () { function t(t, n) { var r, i, s, o = this; this.options = e.extend({}, this.defaults, n); this.$el = t; s = this.defaults; for (r in s) { i = s[r]; if (this.$el.data(r) != null) { this.options[r] = this.$el.data(r) } } this.createStars(); this.syncRating(); this.$el.on("mouseover.starrr", "span", function (e) { return o.syncRating(o.$el.find("span").index(e.currentTarget) + 1) }); this.$el.on("mouseout.starrr", function () { return o.syncRating() }); this.$el.on("click.starrr", "span", function (e) { return o.setRating(o.$el.find("span").index(e.currentTarget) + 1) }); this.$el.on("starrr:change", this.options.change) } t.prototype.defaults = { rating: void 0, numStars: 5, change: function (e, t) { } }; t.prototype.createStars = function () { var e, t, n; n = []; for (e = 1, t = this.options.numStars; 1 <= t ? e <= t : e >= t; 1 <= t ? e++ : e--) { n.push(this.$el.append("<span class='glyphicon .glyphicon-star-empty'></span>")) } return n }; t.prototype.setRating = function (e) { if (this.options.rating === e) { e = void 0 } this.options.rating = e; this.syncRating(); return this.$el.trigger("starrr:change", e) }; t.prototype.syncRating = function (e) { var t, n, r, i; e || (e = this.options.rating); if (e) { for (t = n = 0, i = e - 1; 0 <= i ? n <= i : n >= i; t = 0 <= i ? ++n : --n) { this.$el.find("span").eq(t).removeClass("glyphicon-star-empty").addClass("glyphicon-star") } } if (e && e < 5) { for (t = r = e; e <= 4 ? r <= 4 : r >= 4; t = e <= 4 ? ++r : --r) { this.$el.find("span").eq(t).removeClass("glyphicon-star").addClass("glyphicon-star-empty") } } if (!e) { return this.$el.find("span").removeClass("glyphicon-star").addClass("glyphicon-star-empty") } }; return t }(); return e.fn.extend({ starrr: function () { var t, r; r = arguments[0], t = 2 <= arguments.length ? __slice.call(arguments, 1) : []; return this.each(function () { var i; i = e(this).data("star-rating"); if (!i) { e(this).data("star-rating", i = new n(e(this), r)) } if (typeof r === "string") { return i[r].apply(i, t) } }) } }) })(window.jQuery, window); $(function () { return $(".starrr").starrr() })
+
+    $(function () {
+
+        $('#new-review').autosize({ append: "\n" });
+
+        var reviewBox = $('#post-review-box');
+        var newReview = $('#new-review');
+        var openReviewBtn = $('#open-review-box');
+        var closeReviewBtn = $('#close-review-box');
+        var ratingsField = $('#ratings-hidden');
+
+        openReviewBtn.click(function (e) {
+            reviewBox.slideDown(400, function () {
+                $('#new-review').trigger('autosize.resize');
+                newReview.focus();
+            });
+            openReviewBtn.fadeOut(100);
+            closeReviewBtn.show();
+        });
+
+        closeReviewBtn.click(function (e) {
+            e.preventDefault();
+            reviewBox.slideUp(300, function () {
+                newReview.focus();
+                openReviewBtn.fadeIn(200);
+            });
+            closeReviewBtn.hide();
+
+        });
+
+        $('.starrr').on('starrr:change', function (e, value) {
+            ratingsField.val(value);
+            alert(value);
+            
+        });
+    });
+</script>

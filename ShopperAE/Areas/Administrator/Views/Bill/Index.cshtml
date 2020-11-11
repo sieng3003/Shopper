@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ShopperAE.Areas.Administrator.Models.Order>
+
+@{
+    ViewBag.Title = "Danh Sach Orders";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<h2 style="color:blue;">Danh Sach Orders</h2>
+
+@*<p>
+    <a class="btn btn-info delete-link" href="@Url.Action("Create")">Create</a>
+</p>*@
+<table class="table"> 
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Ghi chú sản phẩm</th>
+            <th>Thời gian</th>
+            <th>Tình trạng đặt hàng</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.cusFullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderStatus)
+            </td>
+            <td>
+                <a class="btn btn-info delete-link" href="@Url.Action("Edit", new { id=item.orderID})">Edit</a>
+                <a class="btn btn-info delete-link" href="@Url.Action("Delete", new { id=item.orderID})">delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $('.delete-link').click(function (e) {
+        var a_href = $(this).attr('href'); /* Lấy giá trị của thuộc tính href */
+        e.preventDefault(); /* Không thực hiện action mặc định */
+        $.ajax({ /* Gửi request lên server */
+            url: a_href, /* Nội dung trong Delete.cshtml cụ thể là deleteModal div được server trả về */
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) { /* Sau khi nhận được giá */
+                $('#content-wrapper').prepend(data); /* body-content div (định nghĩa trong _Layout.cshtml) sẽ thêm deleteModal div vào dưới cùng */
+                $('#MyModal').modal('show'); /* Hiển thị deleteModal div dưới kiểu modal */
+            }
+        });
+    });
+</script>
